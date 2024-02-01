@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce</title>
+</head>
+<body>
+
+<script>
+    //Cria a classe Ecommerce
+    class Ecommerce {
+        constructor() {
+            this.products = []; // cria um array vazio products para colocar lá os products
+            this.cart = []; // mesma coisa que o de cima mas para o carrinho
+        }
+
+        // Aceita um produto e adiciona á lista de productos, neste caso ao array
+        addProduct = (product) => {
+            this.products.push(product);
+        }
+        
+        // Aceita 2 parametros , ID e Preço,  e atualiza o produto com o preço novo
+        setProductPrice = (productId, price) => {
+            const product = this.getProductById(productId);
+            if (product) {
+                product.price = price;
+            }
+        }
+
+        getAllProducts = () => this.products; //devolve a lista de todos os produtos
+
+        getAllProductsNames = () => this.products.map(product => product.name).join(';'); // devolve a lista dos produtos divididos por um ;
+
+        getProductById = (productId) => this.products.find(product => product.id === productId); // aceita um id de um produto e devolve esse mesmo produto
+
+        getProductByName = (productName) => this.products.find(product => product.name === productName); // aceita um nome de produto e devolve esse mesmo produto
+
+
+        //  Aceita dois parametros, o preço inicial e preço final, devolve os produtos que sejam iguais ou superiores ao preço inicial, e menores ou iguais ao preço final
+        getProductsByPrice = (initialPrice, finalPrice) =>
+            this.products.filter(product => product.price >= initialPrice && product.price <= finalPrice);
+
+        // Aceita um produto e adiciona esse produto ao carrinho de compras
+        addProductToCart = (product) => {
+            this.cart.push(product);
+        }
+
+        //Devolve a lista de produtos que estão no carrinho de compras
+        getCart = () => this.cart;
+
+        //Devolve a soma de todos os produtos do carrinho
+        getCartTotalPrice = () => this.cart.reduce((total, product) => total + product.price, 0);
+    }
+
+
+    //criar a instancia ecommerce
+    const ecommerce = new Ecommerce();
+
+    //criar objetos, com id, nome e preço
+    const product1 = { id: 1, name: 'Camisola', price: 20.99 };
+    
+    const product2 = {id: 2, name: 'Hoodie', price: 33.88 };
+
+    ecommerce.addProduct(product1); 
+    ecommerce.addProduct(product2); //aceita um produto e adiciona á lista de produtos
+
+
+    ecommerce.setProductPrice(1, 25.99); // aceita o ID e o preço do produto
+
+    const cartProduct = ecommerce.getProductById(1);
+    ecommerce.addProductToCart(cartProduct); // aceita um produto e adiciona esse produto ao carrinho de compras
+
+
+    /*
+    console.log('All Products:', ecommerce.getAllProducts());
+    console.log('All Products Names:', ecommerce.getAllProductsNames());
+    console.log('Product by ID:', ecommerce.getProductById(1));
+    console.log('Product by Name:', ecommerce.getProductByName('Product B'));
+    console.log('Products by Price:', ecommerce.getProductsByPrice(20, 30));
+    console.log('Cart:', ecommerce.getCart());
+    console.log('Cart Total Price:', ecommerce.getCartTotalPrice()); */
+</script>
+
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto</title>
+    <style>
+   body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0d0d0;
+        }
+
+        #product-details, #related-products {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+    </style>
+</head>
+  
+    <body>
+        <div id="product-details">
+            <h1>Detalhes do Produto</h1>
+            <div id="product-info">
+
+            </div>
+        </div>
+    
+        <div id="related-products">
+            <h2>Produtos Relacionados</h2>
+            <div id="related-products-info">
+
+            </div>
+        </div>
+    
+        <footer>
+            <p id="copyright">
+                Copyright <span id="current-year"></span>
+            </p>
+        </footer>
+    
+        <script>
+            // Obter o ID do produto a partir do URL
+            const urlParams = new URLSearchParams(window.location.search); // Devolve a parte do URL que contém a query string, os parâmetros passados para a página depois do "?" no URL, a função 'URLSearchParams' cria um novo objeto que permite aceder a esses parâmetros
+            const productId = urlParams.get('id'); // Obtem o valor do parâmetro 'id' do URL, o futuro productId
+    
+            // URL do endpoint dos produtos , fiz console log para saber o que está dentro do array
+            const productsURL = `https://fakestoreapi.com/products/`;
+
+            fetch(productsURL)
+                .then(response => response.json())
+                .then(products => {
+                    console.log(products); // Output all products as an array
+                })
+                .catch(error => console.error('Error fetching products:', error));
+
+            // Escolha de um id de produto 
+            const productEndpoint = `https://fakestoreapi.com/products/8`;
+
+
+
+
+            // Função para obter os detalhes do produto
+            fetch(productEndpoint)
+                .then(response => response.json())
+                .then(product => {
+                    // Informações do produto
+                    const productInfo = document.getElementById('product-info');
+                    productInfo.innerHTML = `
+                        <h3>${product.title}</h3>
+                        <p><strong>Preço:</strong> ${product.price}</p>
+                        <p><strong>Descrição:</strong> ${product.description}</p>
+                        <img src="${product.image}" alt="${product.title}">
+                    `;
+                })
+                .catch(error => console.error('Erro ao obter detalhes do produto:', error));
+    
+
+            
+            
+
+
+            // Obter os produtos relacionados da mesma categoria
+            fetch('https://fakestoreapi.com/products/category/jewelery')
+                .then(response => response.json())
+                .then(products => {
+                    // Listar os 3 primeiros produtos relacionados
+                    const relatedProductsInfo = document.getElementById('related-products-info');
+                   //  Iteração sobre os três primeiros produtos da categoria jewelry 
+                    products.slice(0, 3).forEach(product => {
+                       // Adiciona o conteúdo HTML dos produtos relacionados ao elemento, o operador += é usado para adicionar o novo conteúdo, sem substituir o que já existe
+                        relatedProductsInfo.innerHTML += `
+                            <div>
+                                <h3>${product.title}</h3>
+                                <p><strong>Preço:</strong> $${product.price}</p>
+                                <img src="${product.image}" alt="${product.title}">
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Erro ao obter produtos relacionados:', error));
+    
+            // Atualizar o ano no footer
+            const currentYear = new Date().getFullYear();
+            document.getElementById('current-year').textContent = currentYear;
+        </script>
+    
+    
+    
+</body>
+</html>
